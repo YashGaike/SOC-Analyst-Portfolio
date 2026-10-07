@@ -51,7 +51,7 @@ Network threat investigation using Wireshark and a public training PCAP.
 - Google Cybersecurity Professional Certificate
 - Cisco Security Operations Center (SOC)
 - CompTIA Security+ — In Progress
-- TryHackMe cybersecurity training
+- TryHackMe SOC Level 1 Path — In Progress
 
 ## Career Objective
 
