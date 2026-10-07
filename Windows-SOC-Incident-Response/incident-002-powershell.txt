@@ -1,0 +1,59 @@
+Incident ID: 002
+Incident Name: PowerShell Process Investigation
+Detection: Sysmon Event ID 1 - Process Creation
+
+Time: 2026-10-03 14:06:11 IST
+
+Process:
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+
+Command Line:
+"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -Command Get-Date
+
+User:
+WINDOWS10\vboxuser
+
+Process ID:
+2052
+
+Parent Process:
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+
+Integrity Level:
+Medium
+
+Analysis:
+A PowerShell process creation event was observed through Sysmon Event ID 1.
+The process was executed by the vboxuser account on the Windows 10 lab system.
+The command line shows PowerShell running with the -NoProfile option and
+executing the Get-Date command.
+
+The PowerShell activity was intentionally generated as part of an isolated
+SOC training exercise. The observed command is a normal system-information
+command and no malicious payload, encoded command, or suspicious external
+connection was observed in this investigation.
+
+Assessment:
+Benign / Expected Lab Activity - The PowerShell execution was intentionally
+generated in the isolated SOC lab for testing and produced no evidence of
+malicious behavior.
+
+MITRE ATT&CK:
+T1059.001 - PowerShell
+
+Note:
+The ATT&CK mapping represents the observed PowerShell execution behaviour;
+it does not by itself indicate that the activity was malicious.
+
+Recommended Response:
+A SOC analyst should review the PowerShell command line, parent process,
+user context, timestamps, and surrounding events. Additional investigation
+would be appropriate if PowerShell were launched by an unusual parent process,
+used encoded or obfuscated commands, executed suspicious scripts, or
+established unexpected external network connections.
+
+Lessons Learned:
+PowerShell is a legitimate Windows administration tool but can also be
+abused by attackers. Effective detection therefore requires analysis of
+the command line, parent process, user context, and surrounding activity
+rather than treating every PowerShell execution as malicious.

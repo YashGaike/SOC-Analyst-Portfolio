@@ -1,0 +1,66 @@
+Incident ID: 003
+Incident Name: Scheduled Task Registration Investigation
+Detection: Task Scheduler Operational Log
+Event ID: 106 - Task Registered
+
+Time: 2026-10-03 14:54:41 IST
+
+Task Name:
+\SOC-Lab-Test
+
+User Context:
+WINDOWS10\vboxuser
+
+Host:
+windows10
+
+Task Action:
+cmd.exe /c echo SOC Lab Test
+
+Schedule Type:
+One Time Only
+
+Analysis:
+A Task Scheduler Event ID 106 was observed after the creation of the
+scheduled task \SOC-Lab-Test on the Windows 10 lab system.
+
+The event shows that the task was registered by the WINDOWS10\vboxuser
+account. The task was created as part of an isolated SOC training
+exercise and was configured to execute the harmless command:
+
+cmd.exe /c echo SOC Lab Test
+
+Scheduled tasks are relevant to SOC investigations because attackers
+can abuse them to establish persistence or execute programs
+automatically. Therefore, unexpected task creation should be
+investigated by reviewing the task name, creator, command, schedule,
+and surrounding system activity.
+
+Assessment:
+Benign / Expected Lab Activity - The scheduled task was intentionally
+created in the isolated SOC lab for training purposes and was not
+created by an attacker.
+
+MITRE ATT&CK:
+T1053.005 - Scheduled Task/Job: Scheduled Task
+
+Note:
+The ATT&CK mapping identifies the technique associated with the
+observed scheduled-task behavior. It does not by itself indicate
+malicious activity.
+
+Recommended Response:
+For an unexpected scheduled task, a SOC analyst should identify the
+creator, examine the task action or command, determine when and how
+the task was created, review related process activity, and check for
+other persistence or execution indicators.
+
+If the task is unauthorized, the analyst should follow the
+organization's incident-response procedure and remove or disable the
+task after collecting appropriate evidence.
+
+Lessons Learned:
+Scheduled-task creation can be legitimate administrative activity or
+a persistence mechanism. Effective investigation requires examining
+the task creator, task action, timing, and surrounding telemetry rather
+than automatically treating every scheduled task as malicious.

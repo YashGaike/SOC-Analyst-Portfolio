@@ -1,0 +1,22 @@
+Incident ID: 001
+Detection: Windows Event ID 4625
+Event Count: 3
+
+Time:2026-10-02 14:42:52 IST
+Target User:SOCtest
+Logon Type:2
+Failure Reason: Unknown user name or bad password.
+Workstation: WINDOWS10
+Source IP: 127.0.0.1
+Process: C:\Windows\System32\svchost.exe
+
+Analysis:
+Three failed login attempts were generated against the SOCtest accountin 
+my isolated Windows lab.
+
+Assessment:
+Benign - the three logom attempts were intentionally generated for SOC training.
+
+Recommended Response:
+Investigation repeated failures, verify the source, determine wheather the account is legitimate,
+and check for any subsequent succesful login. 
