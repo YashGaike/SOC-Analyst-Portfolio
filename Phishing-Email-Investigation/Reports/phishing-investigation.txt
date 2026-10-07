@@ -1,0 +1,97 @@
+PHISHING EMAIL INVESTIGATION REPORT
+
+Project: Phishing Email Investigation & Threat Intelligence Analysis
+Sample: sample-1001.eml
+Environment: Isolated SOC training lab
+Investigation Type: Email triage, authentication analysis, IOC identification, threat intelligence
+
+1. OBJECTIVE
+Analyze a suspicious email sample as a Tier-1 SOC analyst. The investigation focuses on sender identity, email authentication results, message infrastructure, suspicious attachments, threat-intelligence reputation, and overall phishing likelihood.
+
+2. EMAIL HEADER FINDINGS
+Visible From: support@mail.coinbase.com
+Recipient: noreply-KHWG3@mail.authenticatehelp.com
+Message-ID: <a257a346-80ff-eb01-fe6f-e4e1b6464319@medisept.com.au>
+Date: Wed, 26 Jul 2023 01:28:02 +0000
+Return-Path: mssggeauthenticl-cbspprt-325937197367@medisept.com.au
+
+Key observation:
+The visible From address presents the message as Coinbase-related, while the Message-ID and Return-Path reference medisept.com.au. This infrastructure mismatch is a significant phishing indicator.
+
+3. EMAIL AUTHENTICATION ANALYSIS
+SPF: none
+DKIM: none
+DMARC: none
+Received-SPF: None; medisept.com.au does not designate permitted sender hosts
+
+Interpretation:
+The supplied header evidence does not show successful SPF, DKIM, or DMARC authentication. Combined with the mismatch between the visible sender identity and message infrastructure, this increases suspicion.
+
+Limitation:
+Authentication results alone do not prove maliciousness. They must be evaluated with the sender identity, message content, attachments, and threat intelligence.
+
+4. IOC IDENTIFICATION
+Primary domain: medisept.com.au
+Sender: support@mail.coinbase.com
+Observed infrastructure domain: medisept.com.au
+Attachment: Coinbase -15392.docx
+
+The attachment was identified from the MIME structure of the .eml file. It was not opened or executed.
+
+5. THREAT INTELLIGENCE ANALYSIS
+Source: VirusTotal
+Indicator: medisept.com.au
+Observed result: 0 / 91 security vendors detected the domain
+Community score: 0
+Last analysis shown: 27 days ago
+
+Interpretation:
+At the time of analysis, VirusTotal showed no security-vendor detections for medisept.com.au. This does not establish that the email is legitimate. Domain reputation is one data point and may not reflect abuse, compromise, or a phishing context.
+
+6. PHISHING ASSESSMENT
+Overall Verdict: LIKELY PHISHING / SUSPICIOUS EMAIL
+
+Reasons:
+- The visible sender claims to represent Coinbase.
+- Message-ID and Return-Path reference medisept.com.au rather than the visible Coinbase identity.
+- SPF, DKIM, and DMARC are not authenticated in the supplied header evidence.
+- The email contains a Word attachment named Coinbase -15392.docx.
+- The sender presentation and attachment are consistent with social-engineering behavior.
+
+Counter-indicator / limitation:
+VirusTotal showed 0/91 vendor detections for medisept.com.au, so the domain itself was not independently confirmed as malicious.
+
+7. MITRE ATT&CK MAPPING
+Candidate technique: T1566.001 - Phishing: Spearphishing Attachment
+Rationale: The email contains an attachment presented in a brand-related context, consistent with attachment-based phishing delivery.
+Mapping confidence: Medium. The sample is a training case and the attachment was not opened or executed.
+
+8. SOC RESPONSE RECOMMENDATION
+- Quarantine the message and prevent user interaction with the attachment.
+- Search mail logs for other recipients of the same message.
+- Search for the sender, Return-Path, Message-ID, domain, and attachment filename.
+- Analyze the attachment only in a controlled malware-analysis environment.
+- Check endpoint telemetry for evidence that the attachment was opened or executed.
+- Escalate if related malicious activity is identified.
+
+9. EVIDENCE COLLECTED
+C:\SOC-Lab\Evidence\
+- phishing-email-headers.png
+- phishing-authentication.png
+- phishing-threat-intel.png
+
+10. LESSONS LEARNED
+- The visible From address should not be trusted on its own.
+- SPF, DKIM, and DMARC provide authentication context but must be interpreted together.
+- Message-ID and Return-Path can reveal infrastructure that differs from the displayed sender.
+- A clean VirusTotal reputation does not automatically make an email trustworthy.
+- Attachments should be analyzed safely without opening them on a normal endpoint.
+- Phishing triage requires correlation of multiple indicators.
+
+11. FINAL CONCLUSION
+The sample was assessed as LIKELY PHISHING / SUSPICIOUS based on sender/infrastructure mismatch, lack of authenticated SPF/DKIM/DMARC results, and the presence of a suspicious brand-themed Word attachment. VirusTotal did not identify medisept.com.au as malicious at the time of checking, so the domain was not independently classified as malicious.
+
+This investigation demonstrates:
+Email received -> Header analysis -> Authentication checks -> IOC extraction -> Threat intelligence -> Risk assessment -> MITRE mapping -> Recommended response.
+
+The investigation was performed using a safe training sample in an isolated lab.
